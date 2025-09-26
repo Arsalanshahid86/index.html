@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YouTube RPM → PKR Revenue Calculator</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --card: #161a2b;
+      --muted: #a0a6c0;
+      --text: #e7e9f5;
+      --accent: #6ee7b7;
+      --accent-2: #7aa2ff;
+      --danger: #ff7a7a;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(60% 100% at 10% 0%, #101435 0%, #0f1220 40%, #0b0e19 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .3px; }
+    p.caption { color: var(--muted); margin-top: 0; }
+    .byline { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
+
+    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; }
+    @media (max-width: 860px){ .grid { grid-template-columns: 1fr; } }
+
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+            border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 18px; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .row + .row, .row-3 + .row-3, .row + .row-3, .row-3 + .row { margin-top: 12px; }
+
+    label { font-size: 13px; color: var(--muted); display: block; margin: 0 0 8px; }
+    input, select { width: 100%; padding: 12px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12);
+                    background: #0b0f1f; color: var(--text); outline: none; transition: .2s border-color, .2s box-shadow; }
+    input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(122,162,255,.15); }
+
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .stat {
+      background: linear-gradient(180deg, rgba(110,231,183,.15), rgba(110,231,183,.04));
+      border: 1px solid rgba(110,231,183,.35);
+      padding: 16px; border-radius: 14px; text-align: center;
+    }
+    .stat h3 { margin: 0; font-size: 14px; color: #c9ffe7; font-weight: 600; letter-spacing: .2px; }
+    .stat .val { font-size: 28px; font-weight: 700; margin-top: 8px; }
+
+    .table { width: 100%; border-collapse: collapse; margin-top: 12px; overflow: hidden; border-radius: 12px; }
+    .table thead th { text-align: left; font-size: 12px; color: var(--muted); padding: 10px 12px; background: #10142a; }
+    .table tbody td { padding: 12px; border-top: 1px solid rgba(255,255,255,.06); }
+
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
+            background: rgba(122,162,255,.14); border: 1px solid rgba(122,162,255,.35); font-size: 12px; color: #dfe7ff; }
+
+    .muted { color: var(--muted); }
+    .footer { margin-top: 18px; font-size: 12px; color: var(--muted); }
+    .danger { color: var(--danger); }
+
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    button.copy {
+      padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.15);
+      background: #0d1328; color: var(--text); cursor: pointer; transition: .2s transform, .2s background;
+    }
+    button.copy:hover { background: #11183a; }
+    button.copy:active { transform: translateY(1px); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>YouTube RPM → PKR Revenue Calculator</h1>
+    <p class="byline">Made By <b>M.Arsalan Shahid</b></p>
+    <p class="caption">"Views" dalo, "RPM" select karo (USD ya PKR), aur total <b>PKR</b> revenue turant dekho. Formula: <span class="muted">Revenue = Views ÷ 1000 × RPM(PKR)</span></p>
+
+    <div class="grid">
+      <!-- Inputs -->
+      <section class="card" aria-labelledby="inputs-title">
+        <h2 id="inputs-title" style="margin:0 0 12px; font-size:18px;">Inputs</h2>
+
+        <div class="row">
+          <div>
+            <label for="views">Total Views (kul dekhay)</label>
+            <input type="number" id="views" inputmode="numeric" placeholder="مثال: 1250000" min="0" step="1" />
+            <div class="hint">Aap jitnay views par revenue dekhna chahte hain woh yahan likhen.</div>
+          </div>
+          <div>
+            <label for="rpm">RPM Value</label>
+            <input type="number" id="rpm" inputmode="decimal" placeholder="مثال: 2.5" min="0" step="0.01" />
+            <div class="hint">RPM = Revenue per 1000 views.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="rpmCurrency">RPM Currency</label>
+            <select id="rpmCurrency">
+              <option value="PKR" selected>PKR</option>
+              <option value="USD">USD</option>
+            </select>
+            <div class="hint">Agar aapka RPM USD me hai to neeche USD→PKR rate add karein.</div>
+          </div>
+          <div id="fxWrap">
+            <label for="usdToPkr">USD → PKR Rate</label>
+            <input type="number" id="usdToPkr" inputmode="decimal" placeholder="مثال: 280" min="1" step="0.01" value="280" />
+            <div class="hint">Market rate badalta rehta hai — yahan apna rate set kar sakte hain.</div>
+          </div>
+        </div>
+
+        <div class="row-3">
+          <div>
+            <label for="fmt">Number Format</label>
+            <select id="fmt">
+              <option value="en-PK" selected>1,234,567 (en-PK)</option>
+              <option value="ur-PK">۱٬۲۳۴٬۵۶۷ (ur-PK)</option>
+            </select>
+          </div>
+          <div>
+            <label for="benchA">Custom Bench A (views)</label>
+            <input type="number" id="benchA" placeholder="مثال: 250000" min="1" step="1" />
+          </div>
+          <div>
+            <label for="benchB">Custom Bench B (views)</label>
+            <input type="number" id="benchB" placeholder="مثال: 2500000" min="1" step="1" />
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="copy" id="copyLink" title="Share settings via URL">Share Current Settings</button>
+          <span class="muted" id="shareMsg"></span>
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section class="card" aria-labelledby="output-title">
+        <h2 id="output-title" style="margin:0 0 12px; font-size:18px;">Output (PKR)</h2>
+
+        <div class="stat">
+          <h3>Total Revenue</h3>
+          <div class="val" id="totalRevenue">—</div>
+          <div class="hint" id="effRpm">Effective RPM (PKR): —</div>
+        </div>
+
+        <table class="table" aria-label="Benchmarks">
+          <thead>
+            <tr>
+              <th>Views</th>
+              <th>Revenue (PKR)</th>
+            </tr>
+          </thead>
+          <tbody id="benchBody">
+            <!-- rows injected -->
+          </tbody>
+        </table>
+
+        <p class="footer">Note: Yeh calculator sirf estimation deta hai. Actual YouTube payout ad formats, country mix, seasonality waghera par depend karta hai.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const el = id => document.getElementById(id);
+
+    const views = el('views');
+    const rpm = el('rpm');
+    const rpmCurrency = el('rpmCurrency');
+    const usdToPkr = el('usdToPkr');
+    const fxWrap = document.getElementById('fxWrap');
+    const fmtSel = el('fmt');
+    const benchBody = el('benchBody');
+    const totalRevenue = el('totalRevenue');
+    const effRpm = el('effRpm');
+    const benchA = el('benchA');
+    const benchB = el('benchB');
+    const copyLink = el('copyLink');
+    const shareMsg = el('shareMsg');
+
+    const defaultBenches = [1000, 10000, 100000, 1000000];
+
+    function localeFmt(){ return fmtSel.value || 'en-PK'; }
+
+    function format(n){
+      if (!isFinite(n)) return '—';
+      try { return new Intl.NumberFormat(localeFmt(), { maximumFractionDigits: 0 }).format(Math.round(n)); }
+      catch { return n.toLocaleString(); }
+    }
+
+    function formatMoney(n){
+      if (!isFinite(n)) return '—';
+      const dec = n < 100 ? 2 : (n < 1000 ? 1 : 0);
+      try { return new Intl.NumberFormat(localeFmt(), { maximumFractionDigits: dec }).format(n); }
+      catch { return n.toFixed(dec); }
+    }
+
+    function getEffectiveRpmPkr(){
+      const r = parseFloat(rpm.value || '0');
+      if (r < 0) return 0;
+      if (rpmCurrency.value === 'USD'){
+        const rate = parseFloat(usdToPkr.value || '0');
+        return r * (rate > 0 ? rate : 0);
+      }
+      return r; // already PKR
+    }
+
+    function computeRevenuePKR(v){
+      const rpmPkr = getEffectiveRpmPkr();
+      return (v/1000) * rpmPkr;
+    }
+
+    function render(){
+      fxWrap.style.display = (rpmCurrency.value === 'USD') ? 'block' : 'block';
+
+      const v = Math.max(0, parseFloat(views.value || '0'));
+      const total = computeRevenuePKR(v);
+      totalRevenue.textContent = isFinite(total) ? '₨ ' + formatMoney(total) : '—';
+
+      const rpmPkr = getEffectiveRpmPkr();
+      effRpm.textContent = `Effective RPM (PKR): ${isFinite(rpmPkr) ? '₨ ' + formatMoney(rpmPkr) : '—'}`;
+
+      const A = parseInt(benchA.value || '0');
+      const B = parseInt(benchB.value || '0');
+      const benches = [...defaultBenches];
+      if (A > 0) benches.splice(2, 0, A);
+      if (B > 0) benches.splice(3, 0, B);
+
+      const uniq = Array.from(new Set(benches)).sort((a,b)=>a-b);
+      benchBody.innerHTML = uniq.map(vv => `
+        <tr>
+          <td>${format(vv)}</td>
+          <td>₨ ${formatMoney(computeRevenuePKR(vv))}</td>
+        </tr>
+      `).join('');
+    }
+
+    function encodeState(){
+      const s = new URLSearchParams({
+        v: views.value || '',
+        rpm: rpm.value || '',
+        c: rpmCurrency.value || 'PKR',
+        fx: usdToPkr.value || '',
+        f: fmtSel.value || 'en-PK',
+        a: benchA.value || '',
+        b: benchB.value || ''
+      });
+      return `${location.origin}${location.pathname}?${s.toString()}`;
+    }
+
+    function loadFromQuery(){
+      const q = new URLSearchParams(location.search);
+      if (q.has('v')) views.value = q.get('v');
+      if (q.has('rpm')) rpm.value = q.get('rpm');
+      if (q.has('c')) rpmCurrency.value = q.get('c');
+      if (q.has('fx')) usdToPkr.value = q.get('fx');
+      if (q.has('f')) fmtSel.value = q.get('f');
+      if (q.has('a')) benchA.value = q.get('a');
+      if (q.has('b')) benchB.value = q.get('b');
+    }
+
+    [views, rpm, rpmCurrency, usdToPkr, fmtSel, benchA, benchB].forEach(elm => {
+      elm.addEventListener('input', render);
+      elm.addEventListener('change', render);
+    });
+
+    copyLink.addEventListener('click', async () => {
+      const url = encodeState();
+      try {
+        await navigator.clipboard.writeText(url);
+        shareMsg.textContent = 'Link copied!';
+        setTimeout(()=> shareMsg.textContent = '', 1800);
+      } catch {
+        shareMsg.textContent = 'Copy failed — URL shown in address bar.';
+        setTimeout(()=> shareMsg.textContent = '', 2200);
+      }
+    });
+
+    loadFromQuery();
+    render();
+  </script>
+</body>
+</html>
