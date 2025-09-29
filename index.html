@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,9 +10,9 @@
       --card: #161a2b;
       --muted: #a0a6c0;
       --text: #e7e9f5;
-      --accent: #6ee7b7;
-      --accent-2: #7aa2ff;
-      --danger: #ff7a7a;
+      --accent: #4a90e2;
+      --accent-2: #357ABD;
+      --highlight: #1c3c5a;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius: 18px;
     }
@@ -35,34 +35,29 @@
             padding: 18px; }
 
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-    .row + .row, .row-3 + .row-3, .row + .row-3, .row-3 + .row { margin-top: 12px; }
+    .row + .row { margin-top: 12px; }
 
     label { font-size: 13px; color: var(--muted); display: block; margin: 0 0 8px; }
     input, select { width: 100%; padding: 12px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12);
                     background: #0b0f1f; color: var(--text); outline: none; transition: .2s border-color, .2s box-shadow; }
-    input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(122,162,255,.15); }
+    input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(53,122,189,.25); }
 
     .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
 
     .stat {
-      background: linear-gradient(180deg, rgba(110,231,183,.15), rgba(110,231,183,.04));
-      border: 1px solid rgba(110,231,183,.35);
-      padding: 16px; border-radius: 14px; text-align: center;
+      background: linear-gradient(180deg, rgba(74,144,226,.25), rgba(74,144,226,.08));
+      border: 1px solid rgba(74,144,226,.6);
+      padding: 20px; border-radius: 14px; text-align: center;
     }
-    .stat h3 { margin: 0; font-size: 14px; color: #c9ffe7; font-weight: 600; letter-spacing: .2px; }
-    .stat .val { font-size: 28px; font-weight: 700; margin-top: 8px; }
+    .stat h3 { margin: 0; font-size: 15px; color: #bcdfff; font-weight: 600; letter-spacing: .2px; }
+    .stat .val { font-size: 32px; font-weight: 800; margin-top: 10px; color: #ffffff; }
 
     .table { width: 100%; border-collapse: collapse; margin-top: 12px; overflow: hidden; border-radius: 12px; }
     .table thead th { text-align: left; font-size: 12px; color: var(--muted); padding: 10px 12px; background: #10142a; }
     .table tbody td { padding: 12px; border-top: 1px solid rgba(255,255,255,.06); }
 
-    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
-            background: rgba(122,162,255,.14); border: 1px solid rgba(122,162,255,.35); font-size: 12px; color: #dfe7ff; }
-
     .muted { color: var(--muted); }
     .footer { margin-top: 18px; font-size: 12px; color: var(--muted); }
-    .danger { color: var(--danger); }
 
     .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
     button.copy {
@@ -77,7 +72,7 @@
   <div class="wrap">
     <h1>YouTube RPM → PKR Revenue Calculator</h1>
     <p class="byline">Made By <b>M.Arsalan Shahid</b></p>
-    <p class="caption">"Views" dalo, "RPM" select karo (USD ya PKR), aur total <b>PKR</b> revenue turant dekho. Formula: <span class="muted">Revenue = Views ÷ 1000 × RPM(PKR)</span></p>
+    <p class="caption">Enter total <b>Views</b>, select <b>RPM</b> currency (PKR or USD), and instantly calculate your revenue in PKR.</p>
 
     <div class="grid">
       <!-- Inputs -->
@@ -86,13 +81,12 @@
 
         <div class="row">
           <div>
-            <label for="views">Total Views (kul dekhay)</label>
-            <input type="number" id="views" inputmode="numeric" placeholder="مثال: 1250000" min="0" step="1" />
-            <div class="hint">Aap jitnay views par revenue dekhna chahte hain woh yahan likhen.</div>
+            <label for="views">Total Views</label>
+            <input type="number" id="views" inputmode="numeric" placeholder="Example: 1250000" min="0" step="1" />
           </div>
           <div>
             <label for="rpm">RPM Value</label>
-            <input type="number" id="rpm" inputmode="decimal" placeholder="مثال: 2.5" min="0" step="0.01" />
+            <input type="number" id="rpm" inputmode="decimal" placeholder="Example: 2.5" min="0" step="0.01" />
             <div class="hint">RPM = Revenue per 1000 views.</div>
           </div>
         </div>
@@ -104,30 +98,20 @@
               <option value="PKR" selected>PKR</option>
               <option value="USD">USD</option>
             </select>
-            <div class="hint">Agar aapka RPM USD me hai to neeche USD→PKR rate add karein.</div>
           </div>
           <div id="fxWrap">
             <label for="usdToPkr">USD → PKR Rate</label>
-            <input type="number" id="usdToPkr" inputmode="decimal" placeholder="مثال: 280" min="1" step="0.01" value="280" />
-            <div class="hint">Market rate badalta rehta hai — yahan apna rate set kar sakte hain.</div>
+            <input type="number" id="usdToPkr" inputmode="decimal" placeholder="Example: 280" min="1" step="0.01" value="280" />
           </div>
         </div>
 
-        <div class="row-3">
+        <div class="row">
           <div>
-            <label for="fmt">Number Format</label>
-            <select id="fmt">
-              <option value="en-PK" selected>1,234,567 (en-PK)</option>
-              <option value="ur-PK">۱٬۲۳۴٬۵۶۷ (ur-PK)</option>
-            </select>
-          </div>
-          <div>
-            <label for="benchA">Custom Bench A (views)</label>
-            <input type="number" id="benchA" placeholder="مثال: 250000" min="1" step="1" />
-          </div>
-          <div>
-            <label for="benchB">Custom Bench B (views)</label>
-            <input type="number" id="benchB" placeholder="مثال: 2500000" min="1" step="1" />
+            <label for="monthlyMode">
+              <input type="checkbox" id="monthlyMode" />
+              Treat Views as Monthly Views
+            </label>
+            <div class="hint">Enable to see 1, 3, and 6 months revenue estimates.</div>
           </div>
         </div>
 
@@ -147,6 +131,7 @@
           <div class="hint" id="effRpm">Effective RPM (PKR): —</div>
         </div>
 
+        <h2 style="margin:20px 0 12px; font-size:18px;">Benchmarks</h2>
         <table class="table" aria-label="Benchmarks">
           <thead>
             <tr>
@@ -159,7 +144,20 @@
           </tbody>
         </table>
 
-        <p class="footer">Note: Yeh calculator sirf estimation deta hai. Actual YouTube payout ad formats, country mix, seasonality waghera par depend karta hai.</p>
+        <h2 style="margin:20px 0 12px; font-size:18px;">Income Estimates</h2>
+        <table class="table" aria-label="Monthly Estimates">
+          <thead>
+            <tr>
+              <th>Duration</th>
+              <th>Revenue (PKR)</th>
+            </tr>
+          </thead>
+          <tbody id="monthBody">
+            <tr><td colspan="2" class="muted">Enable "Monthly Views" option to see estimates.</td></tr>
+          </tbody>
+        </table>
+
+        <p class="footer">Note: This calculator gives only an estimation. Actual YouTube payout depends on ad formats, country mix, seasonality, etc.</p>
       </section>
     </div>
   </div>
@@ -171,31 +169,20 @@
     const rpm = el('rpm');
     const rpmCurrency = el('rpmCurrency');
     const usdToPkr = el('usdToPkr');
-    const fxWrap = document.getElementById('fxWrap');
-    const fmtSel = el('fmt');
-    const benchBody = el('benchBody');
     const totalRevenue = el('totalRevenue');
     const effRpm = el('effRpm');
-    const benchA = el('benchA');
-    const benchB = el('benchB');
     const copyLink = el('copyLink');
     const shareMsg = el('shareMsg');
+    const monthBody = el('monthBody');
+    const monthlyMode = el('monthlyMode');
+    const benchBody = el('benchBody');
 
     const defaultBenches = [1000, 10000, 100000, 1000000];
-
-    function localeFmt(){ return fmtSel.value || 'en-PK'; }
-
-    function format(n){
-      if (!isFinite(n)) return '—';
-      try { return new Intl.NumberFormat(localeFmt(), { maximumFractionDigits: 0 }).format(Math.round(n)); }
-      catch { return n.toLocaleString(); }
-    }
 
     function formatMoney(n){
       if (!isFinite(n)) return '—';
       const dec = n < 100 ? 2 : (n < 1000 ? 1 : 0);
-      try { return new Intl.NumberFormat(localeFmt(), { maximumFractionDigits: dec }).format(n); }
-      catch { return n.toFixed(dec); }
+      return new Intl.NumberFormat('en-PK', { maximumFractionDigits: dec }).format(n);
     }
 
     function getEffectiveRpmPkr(){
@@ -205,7 +192,7 @@
         const rate = parseFloat(usdToPkr.value || '0');
         return r * (rate > 0 ? rate : 0);
       }
-      return r; // already PKR
+      return r;
     }
 
     function computeRevenuePKR(v){
@@ -214,8 +201,6 @@
     }
 
     function render(){
-      fxWrap.style.display = (rpmCurrency.value === 'USD') ? 'block' : 'block';
-
       const v = Math.max(0, parseFloat(views.value || '0'));
       const total = computeRevenuePKR(v);
       totalRevenue.textContent = isFinite(total) ? '₨ ' + formatMoney(total) : '—';
@@ -223,54 +208,38 @@
       const rpmPkr = getEffectiveRpmPkr();
       effRpm.textContent = `Effective RPM (PKR): ${isFinite(rpmPkr) ? '₨ ' + formatMoney(rpmPkr) : '—'}`;
 
-      const A = parseInt(benchA.value || '0');
-      const B = parseInt(benchB.value || '0');
-      const benches = [...defaultBenches];
-      if (A > 0) benches.splice(2, 0, A);
-      if (B > 0) benches.splice(3, 0, B);
-
-      const uniq = Array.from(new Set(benches)).sort((a,b)=>a-b);
-      benchBody.innerHTML = uniq.map(vv => `
+      // Benchmarks
+      benchBody.innerHTML = defaultBenches.map(vv => `
         <tr>
-          <td>${format(vv)}</td>
+          <td>${vv.toLocaleString()}</td>
           <td>₨ ${formatMoney(computeRevenuePKR(vv))}</td>
         </tr>
       `).join('');
+
+      // Monthly Income Section
+      if (monthlyMode.checked && v > 0) {
+        const monthly = computeRevenuePKR(v);
+        const threeMonth = monthly * 3;
+        const sixMonth = monthly * 6;
+
+        monthBody.innerHTML = `
+          <tr><td>1 Month</td><td>₨ ${formatMoney(monthly)}</td></tr>
+          <tr><td>3 Months</td><td>₨ ${formatMoney(threeMonth)}</td></tr>
+          <tr><td>6 Months</td><td>₨ ${formatMoney(sixMonth)}</td></tr>
+        `;
+      } else {
+        monthBody.innerHTML = `<tr><td colspan="2" class="muted">Enable \"Monthly Views\" option to see estimates.</td></tr>`;
+      }
     }
 
-    function encodeState(){
-      const s = new URLSearchParams({
-        v: views.value || '',
-        rpm: rpm.value || '',
-        c: rpmCurrency.value || 'PKR',
-        fx: usdToPkr.value || '',
-        f: fmtSel.value || 'en-PK',
-        a: benchA.value || '',
-        b: benchB.value || ''
-      });
-      return `${location.origin}${location.pathname}?${s.toString()}`;
-    }
-
-    function loadFromQuery(){
-      const q = new URLSearchParams(location.search);
-      if (q.has('v')) views.value = q.get('v');
-      if (q.has('rpm')) rpm.value = q.get('rpm');
-      if (q.has('c')) rpmCurrency.value = q.get('c');
-      if (q.has('fx')) usdToPkr.value = q.get('fx');
-      if (q.has('f')) fmtSel.value = q.get('f');
-      if (q.has('a')) benchA.value = q.get('a');
-      if (q.has('b')) benchB.value = q.get('b');
-    }
-
-    [views, rpm, rpmCurrency, usdToPkr, fmtSel, benchA, benchB].forEach(elm => {
+    [views, rpm, rpmCurrency, usdToPkr, monthlyMode].forEach(elm => {
       elm.addEventListener('input', render);
       elm.addEventListener('change', render);
     });
 
     copyLink.addEventListener('click', async () => {
-      const url = encodeState();
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(location.href);
         shareMsg.textContent = 'Link copied!';
         setTimeout(()=> shareMsg.textContent = '', 1800);
       } catch {
@@ -279,7 +248,6 @@
       }
     });
 
-    loadFromQuery();
     render();
   </script>
 </body>
